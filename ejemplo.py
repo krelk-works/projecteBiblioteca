@@ -1,7 +1,25 @@
 import sys
+import hashlib
+
+sesion = False
     
 def login(username, password):
-    print("Inicio de sesión de : ",username, password)
+    ###llistaUsuaris = open("usuaris.txt", "r")
+    ##print(llistaUsuaris.read())
+    ###print("Inicio de sesión de : ",username, password)
+    ###print("Contraseña encriptada : ",encriptar(password))
+    
+    with open("usuaris.txt") as archivo:
+        for linea in archivo:
+            nombre, contraseña = linea.split("|")
+            print("Nombre usuario: ", nombre)
+            print("Contraseña : ", contraseña)
+            
+    
+    
+def encriptar(password):
+    return hashlib.md5(password.encode()).hexdigest()
+    
 
 try:
     match sys.argv[1]:
