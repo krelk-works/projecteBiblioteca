@@ -49,6 +49,9 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     with open("llibres.txt", "a") as archivo:
         archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
         print("Has añadido el libro correctamente, HIJO DE PUTA")
+        
+def esborrarLlibre(titol):
+    print("Borrando libro : ", titol)
     
 def bibliotecaMenu():
     print("\n")
@@ -76,6 +79,12 @@ def bibliotecaMenu():
                 else:
                     print("No has inserit correctament totes les dades del llibre, torna-ho a probar")
                     bibliotecaMenu()
+            case 4:
+                llibreTitol = str(input("Insereix el titol del llibre que volguis eliminar: "))
+                if llibreTitol:
+                    esborrarLlibre(llibreTitol)
+                else:
+                    print("No has inserit el nom del llibre a esborrar")
             case _:
                 print("\nError : Opcio no válida : "+str(opcio))
                 bibliotecaMenu()
