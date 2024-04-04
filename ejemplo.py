@@ -1,21 +1,30 @@
 import sys
 import hashlib
 
-sesion = False
+session = False
+sessionName = None
+sessionTry = 0
     
 def login(username, password):
-    ###llistaUsuaris = open("usuaris.txt", "r")
-    ##print(llistaUsuaris.read())
-    ###print("Inicio de sesión de : ",username, password)
-    ###print("Contraseña encriptada : ",encriptar(password))
-    
+    global session, sessionName, sessionTry
     with open("usuaris.txt") as archivo:
         for linea in archivo:
-            nombre, contraseña = linea.split("|")
-            print("Nombre usuario: ", nombre)
-            print("Contraseña : ", contraseña)
-            
+            username_bbdd, password_bbdd = linea.split("|")
+            if username_bbdd == username and password_bbdd == password:
+                session = True
+                sessionName = username
+                print("Benvingut "+username)
+                break
     
+    if session != True and sessionTry < 3:
+        sessionTry=sessionTry+1
+        print("Has fallat l'inici de sessió, torna-ho a provar.")
+        newusername = str(input("Nom d'usuari: "))
+        newpassword = str(input("Contrasenya: "))
+        login(newusername, newpassword)
+    else:
+        print("Has esgotat el numero d'intents disponibles, prova-ho més tard.")
+        
     
 def encriptar(password):
     return hashlib.md5(password.encode()).hexdigest()
