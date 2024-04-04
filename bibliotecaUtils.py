@@ -10,9 +10,7 @@ def login(username, password):
     with open("usuaris.txt") as archivo:
         for linea in archivo:
             username_bbdd, password_bbdd = linea.split("|")
-            username_bbdd = username_bbdd.strip() ### Evitar errores por espacios en blanco en el nombre
-            password_bbdd = password_bbdd.strip() ### Evitar errores por espacios en blanco en la contraseña
-            if username_bbdd == username and password_bbdd == password:
+            if username_bbdd.strip() == username and password_bbdd.strip() == password:
                 session = True
                 sessionName = username
                 print("Benvingut "+username)
@@ -32,10 +30,19 @@ def login(username, password):
 def encriptar(password):
     return str(hashlib.md5(password.encode()).hexdigest())
 
-def agregar_libro(titol, autor, any_publicacio, genere, ISBN):
+def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
+    ### Comprobamos si ya existe el libro
+    with open("llibres.txt") as archivo:
+        for linea in archivo:
+            titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
+            if titol_bbdd.strip() == titol and autor_bbdd.strip() == autor and any_publicacio_bbdd.strip() and genere_bbdd.strip() == genere and isbn_bbdd.strip() == ISBN:
+                print("El llibre amb titol",titol,"ja existeix a la Base de Dades")
+                break
+    
+    ### Agregamos el libro
     with open("llibres.txt", "a") as archivo:
         archivo.write(f"{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}\n")
-    print("Has añadido el libro correctamente, HIJO DE PUTA")
+        print("Has añadido el libro correctamente, HIJO DE PUTA")
     
 def bibliotecaMenu():
     print("\n")
@@ -54,7 +61,16 @@ def bibliotecaMenu():
         match opcio:
             case 1:
                 ###agregar_libro()
-                print("Agregar libro...")
+                llibreTitol = str(input("Insereix el titol del llibre: "))
+                autorTitol = str(input("Insereix l'autor del llibre: "))
+                anyPublicacio = str(input("Insereix l'any de publicació: "))
+                genereLlibre = str(input("Insereix el genere del llibre: "))
+                isbnLlibre = str(input("Insereix el ISBN del llibre: "))
+                if llibreTitol and autorTitol and anyPublicacio and genereLlibre and isbnLlibre:
+                    agregarLibro(llibreTitol, autorTitol, anyPublicacio, genereLlibre, isbnLlibre)
+                else:
+                    print("No has inserit correctament totes les dades del llibre, torna-ho a probar")
+                    bibliotecaMenu()
             case _:
                 print("\nError : Opcio no válida : "+str(opcio))
                 bibliotecaMenu()
