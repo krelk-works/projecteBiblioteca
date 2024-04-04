@@ -17,18 +17,23 @@ def login(username, password):
                 bibliotecaMenu()
                 break
     
-    if session != True and sessionTry < 3:
+    if session != True and sessionTry < 2:
         sessionTry=sessionTry+1
         print("Has fallat l'inici de sessió, torna-ho a provar.")
         newusername = str(input("Nom d'usuari: "))
         newpassword = str(input("Contrasenya: "))
         login(newusername, newpassword)
-    elif session != True and sessionTry == 3:
+    elif session != True and sessionTry == 2:
         print("Has esgotat el numero d'intents disponibles, prova-ho més tard.")
         
     
 def encriptar(password):
     return str(hashlib.md5(password.encode()).hexdigest())
+
+def buscarLibro(titol):
+    with open("llibres.txt") as archivo:
+        for linea in archivo:
+            titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
 
 def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     ### Comprobamos si ya existe el libro
@@ -37,7 +42,8 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
             titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
             if titol_bbdd.strip() == titol and autor_bbdd.strip() == autor and any_publicacio_bbdd.strip() and genere_bbdd.strip() == genere and isbn_bbdd.strip() == ISBN:
                 print("El llibre amb titol",titol,"ja existeix a la Base de Dades")
-                break
+                bibliotecaMenu()
+                return
     
     ### Agregamos el libro
     with open("llibres.txt", "a") as archivo:
@@ -59,8 +65,7 @@ def bibliotecaMenu():
     try:
         opcio=int(input("Seleccionar opció: "))
         match opcio:
-            case 1:
-                ###agregar_libro()
+            case 3:
                 llibreTitol = str(input("Insereix el titol del llibre: "))
                 autorTitol = str(input("Insereix l'autor del llibre: "))
                 anyPublicacio = str(input("Insereix l'any de publicació: "))

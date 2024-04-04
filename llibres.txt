@@ -5,3 +5,5 @@ El Principito|Antoine de Saint-Exupéry|1943|Fábula|978-3-16-148410-0
 Fahrenheit 451|Ray Bradbury|1953|Distopía|978-1-59307-301-9
 Don Quijote de la Mancha|Miguel de Cervantes|1605|Novela|978-84-206-1933-3
 Amador Rivas|El Mismo|1997|Sexo Duro|798692642-246-2-46-246-426
+Prueba|Peneitor|1650|SexoDuro|17365135135-135-1-531531
+Hola Mundo|Jorge Gutierez|1111|Aventura|123123-123-123-1-23

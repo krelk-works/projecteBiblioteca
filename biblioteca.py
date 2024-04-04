@@ -1,8 +1,6 @@
 import sys
 from bibliotecaUtils import *
 
-
-
 try:
     match sys.argv[1]:
         case "-login":
