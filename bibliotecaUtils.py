@@ -32,8 +32,19 @@ def encriptar(password):
 
 def buscarLibro(titol):
     with open("llibres.txt") as archivo:
+        encontrado=False
         for linea in archivo:
             titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
+            if titol_bbdd.lower() == titol.lower():
+                print("Títol:", titol_bbdd)
+                print("Autor:", autor_bbdd)
+                print("Año de publicacion:", any_publicacio_bbdd)
+                print("Genero:", genere_bbdd)
+                print("ISBN:", isbn_bbdd)
+                encontrado = True
+                break
+        if not encontrado:
+            print("LIbro no encontrado")
 
 def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     ### Comprobamos si ya existe el libro
@@ -48,7 +59,7 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     ### Agregamos el libro
     with open("llibres.txt", "a") as archivo:
         archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
-        print("Has añadido el libro correctamente, HIJO DE PUTA")
+        print("Has añadido el libro correctamente")
         
 def esborrarLlibre(titol):
     print("Borrando libro : ", titol)
@@ -68,6 +79,9 @@ def bibliotecaMenu():
     try:
         opcio=int(input("Seleccionar opció: "))
         match opcio:
+            case 1:
+                titol = input("Introdueix el nom del llibre que vols veure: ")
+                buscarLibro(titol)
             case 3:
                 llibreTitol = str(input("Insereix el titol del llibre: "))
                 autorTitol = str(input("Insereix l'autor del llibre: "))
