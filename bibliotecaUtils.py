@@ -41,7 +41,7 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     
     ### Agregamos el libro
     with open("llibres.txt", "a") as archivo:
-        archivo.write(f"{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}\n")
+        archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
         print("Has añadido el libro correctamente, HIJO DE PUTA")
     
 def bibliotecaMenu():
