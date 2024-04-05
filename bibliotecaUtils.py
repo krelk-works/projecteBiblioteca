@@ -45,6 +45,7 @@ def buscarLibro(titol):
                 break
         if not encontrado:
             print("LIbro no encontrado")
+    bibliotecaMenu()
 
 def verTodosLosLibros():
     with open("llibres.txt") as archivo:
@@ -57,6 +58,8 @@ def verTodosLosLibros():
             print("Género:", genere_bbdd)
             print("ISBN:", isbn_bbdd)
             print("-------------------")
+            
+    bibliotecaMenu()
 
 def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     ### Comprobamos si ya existe el libro
@@ -72,6 +75,8 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     with open("llibres.txt", "a") as archivo:
         archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
         print("Has añadido el libro correctamente")
+        
+    bibliotecaMenu()
         
 def esborrarLlibre(titol):
     confirmacio = str(input("Realemnt vols esborrar el llibre de la base de dades? [S/N]"))
