@@ -46,6 +46,18 @@ def buscarLibro(titol):
         if not encontrado:
             print("LIbro no encontrado")
 
+def verTodosLosLibros():
+    with open("llibres.txt") as archivo:
+        print("Estos son todos los libros:")
+        for linea in archivo:
+            titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.strip().split("|")
+            print("Título:", titol_bbdd)
+            print("Autor:", autor_bbdd)
+            print("Año de publicación:", any_publicacio_bbdd)
+            print("Género:", genere_bbdd)
+            print("ISBN:", isbn_bbdd)
+            print("-------------------")
+
 def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     ### Comprobamos si ya existe el libro
     with open("llibres.txt") as archivo:
@@ -82,6 +94,8 @@ def bibliotecaMenu():
             case 1:
                 titol = input("Introdueix el nom del llibre que vols veure: ")
                 buscarLibro(titol)
+            case 2:
+                verTodosLosLibros()
             case 3:
                 llibreTitol = str(input("Insereix el titol del llibre: "))
                 autorTitol = str(input("Insereix l'autor del llibre: "))
@@ -99,6 +113,9 @@ def bibliotecaMenu():
                     esborrarLlibre(llibreTitol)
                 else:
                     print("No has inserit el nom del llibre a esborrar")
+            case 6:
+                print("Saliendo")
+                exit()
             case _:
                 print("\nError : Opcio no válida : "+str(opcio))
                 bibliotecaMenu()
