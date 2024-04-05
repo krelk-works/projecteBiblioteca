@@ -44,18 +44,18 @@ def buscarLibro(titol):
                 encontrado = True
                 break
         if not encontrado:
-            print("LIbro no encontrado")
+            print("Llibre no trobat")
     bibliotecaMenu()
 
 def verTodosLosLibros():
     with open("llibres.txt") as archivo:
-        print("Estos son todos los libros:")
+        print("Llistat de llibres:")
         for linea in archivo:
             titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.strip().split("|")
-            print("Título:", titol_bbdd)
+            print("Titol:", titol_bbdd)
             print("Autor:", autor_bbdd)
-            print("Año de publicación:", any_publicacio_bbdd)
-            print("Género:", genere_bbdd)
+            print("Any de publicacio:", any_publicacio_bbdd)
+            print("Genere:", genere_bbdd)
             print("ISBN:", isbn_bbdd)
             print("-------------------")
             
@@ -74,7 +74,7 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
     ### Agregamos el libro
     with open("llibres.txt", "a") as archivo:
         archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
-        print("Has añadido el libro correctamente")
+        print("Has afegit el llibre ",titol,"correctament")
         
     bibliotecaMenu()
         
@@ -93,18 +93,57 @@ def esborrarLlibre(titol):
         print("Esborrament de llibre cancelat, tornant al menu principal")
     bibliotecaMenu()
     
-def esborrarLinia(archivo, linea_a_borrar):
+def esborrarLinia(arxiu, liniaPerEsborrar):
     # Leer el contenido del archivo
-    with open(archivo, 'r') as f:
-        lineas = f.readlines()
+    with open(arxiu, 'r') as f:
+        linias = f.readlines()
 
     # Eliminar la línea especificada
-    lineas = [linea for linea in lineas if linea.strip() != linea_a_borrar.strip()]
+    linias = [linia for linia in linias if linia.strip() != liniaPerEsborrar.strip()]
 
     # Reescribir el archivo sin la línea y las líneas en blanco adicionales
-    with open(archivo, 'w') as f:
-        f.writelines(linea for linea in lineas if linea.strip())
+    with open(arxiu, 'w') as f:
+        f.writelines(linia for linia in linias if linia.strip())
+        
+def editarLlibre(titol):
+    llibreTrobat = False
     
+    # Dades de la base de dades
+    titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd, liniaLlibre = None, None, None, None, None, None
+    
+    with open("llibres.txt") as archivo:
+        for linea in archivo:
+                titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
+                if titol_bbdd.lower() == titol.lower():
+                    llibreTrobat = True
+                    liniaLlibre = linea
+                    break
+        
+    if llibreTrobat:
+        print("A continuació modifica les dades del llibre (si ho deixes en blanc no es canviara)")
+        print("==================================================================================")
+        print("Llibre actual :",titol)
+        llibreTitol = str(input("Insereix el nou titol del llibre: "))
+        autorTitol = str(input("Insereix nou autor del llibre: "))
+        anyPublicacio = str(input("Insereix nou any de publicació: "))
+        genereLlibre = str(input("Insereix nou genere del llibre: "))
+        isbnLlibre = str(input("Insereix el nou ISBN del llibre: "))
+        
+        nouTitol = llibreTitol or titol_bbdd
+        nouAutor = autorTitol or autor_bbdd
+        nouAny = anyPublicacio or any_publicacio_bbdd
+        nouGenere = genereLlibre or genere_bbdd
+        nouISBN = isbnLlibre or isbn_bbdd
+        
+        esborrarLinia("llibres.txt", liniaLlibre)
+        
+        agregarLibro(nouTitol, nouAutor, nouAny, nouGenere, nouISBN)
+        
+        print("Llibre actualitzat")
+    else:
+        print("No s'ha trobat el llibre que vols editar. Es torna al menu principal.")
+        bibliotecaMenu()
+
 def bibliotecaMenu():
     print("\n")
     print("=========================")
@@ -142,8 +181,16 @@ def bibliotecaMenu():
                     esborrarLlibre(llibreTitol)
                 else:
                     print("No has inserit el nom del llibre a esborrar")
+                    bibliotecaMenu()
+            case 5:
+                llibreTitol = str(input("Insereix el titol del llibre que volguis editar: "))
+                if llibreTitol:
+                    editarLlibre(llibreTitol)
+                else:
+                    print("No has inserit el nom del llibre a editar")
+                    bibliotecaMenu()
             case 6:
-                print("Saliendo")
+                print("Aplicació tancada")
                 exit()
             case _:
                 print("\nError : Opcio no válida : "+str(opcio))

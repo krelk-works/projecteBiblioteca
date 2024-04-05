@@ -1,6 +1,23 @@
 Títol|Autor/a|Any de publicació|Genere|ISBN
 Cien Años de Soledad|Gabriel García Márquez|1967|Novela|978-3-12-579850-2
 1984|George Orwell|1949|Ciencia Ficción|978-0-452-28423-4
-El Principito|Antoine de Saint-Exupéry|1943|Fábula|978-3-16-148410-0
 Fahrenheit 451|Ray Bradbury|1953|Distopía|978-1-59307-301-9
 Don Quijote de la Mancha|Miguel de Cervantes|1605|Novela|978-84-206-1933-3
+Hamlet|William Shakespeare|1603|Tragedia|978-1-62315-047-9
+Cien años de soledad|Gabriel García Márquez|1967|Novela|978-84-663-1391-4
+Orgullo y prejuicio|Jane Austen|1813|Novela|978-84-206-1246-5
+El gran Gatsby|F. Scott Fitzgerald|1925|Novela|978-0-7432-7356-5
+Moby Dick|Herman Melville|1851|Novela|978-1-841-59185-1
+El señor de los anillos|J.R.R. Tolkien|1954|Fantasía|978-84-450-7413-8
+Harry Potter y la piedra filosofal|J.K. Rowling|1997|Fantasía|978-84-9838-964-1
+La Metamorfosis|Franz Kafka|1915|Novela corta|978-84-96879-04-6
+El principito|Antoine de Saint-Exupéry|1943|Novela|978-84-235-2412-3
+Las aventuras de Sherlock Holmes|Arthur Conan Doyle|1892|Novela|978-84-206-4122-3
+La divina comedia|Dante Alighieri|Siglo XIV|Poema épico|978-84-206-8570-1
+Don Juan Tenorio|José Zorrilla|1844|Drama|978-84-9104-004-8
+El extraño caso del Dr. Jekyll y Mr. Hyde|Robert Louis Stevenson|1886|Novela|978-84-7765-527-5
+El retrato de Dorian Gray|Oscar Wilde|1890|Novela|978-84-935523-7-6
+Drácula|Bram Stoker|1897|Novela de terror|978-84-376-0494-2
+Frankenstein|Mary Shelley|1818|Novela de terror|978-84-376-0494-2
+Crimen y castigo|Fyodor Dostoevsky|1866|Novela|978-84-7679-187-9
+La isla del tesoro|Robert Louis Stevenson|1883|Novela de aventuras|978-84-499-3959-2
