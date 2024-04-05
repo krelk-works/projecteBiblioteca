@@ -74,7 +74,31 @@ def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
         print("Has añadido el libro correctamente")
         
 def esborrarLlibre(titol):
-    print("Borrando libro : ", titol)
+    confirmacio = str(input("Realemnt vols esborrar el llibre de la base de dades? [S/N]"))
+    if confirmacio.capitalize() == "S":
+        with open("llibres.txt") as archivo:
+            for linia in archivo:
+                titol_bbdd = linia.split("|")[0]
+                if titol == titol_bbdd:
+                    esborrarLinia("llibres.txt", linia)
+                    ###archivo.write(linia)
+                    print("Llibre esborrat :",titol)
+                    break
+    else:
+        print("Esborrament de llibre cancelat, tornant al menu principal")
+    bibliotecaMenu()
+    
+def esborrarLinia(archivo, linea_a_borrar):
+    # Leer el contenido del archivo
+    with open(archivo, 'r') as f:
+        lineas = f.readlines()
+
+    # Eliminar la línea especificada
+    lineas = [linea for linea in lineas if linea.strip() != linea_a_borrar.strip()]
+
+    # Reescribir el archivo sin la línea y las líneas en blanco adicionales
+    with open(archivo, 'w') as f:
+        f.writelines(linea for linea in lineas if linea.strip())
     
 def bibliotecaMenu():
     print("\n")
