@@ -18,7 +18,7 @@ Este es un gestor de biblioteca simple desarrollado en Python para añadir, most
 1. **Instalación:**
    - Clona este repositorio en tu máquina local:
      ```
-     git clone https://github.com/krelk_works/projecteBiblioteca.git
+     git clone https://github.com/krelk-works/projecteBiblioteca.git
      ```
 
 2. **Ejecución:**
