@@ -1,4 +1,6 @@
 import hashlib
+from getpass import getpass
+
 
 session = False
 sessionName = None
@@ -7,32 +9,35 @@ sessionTry = 0
 def login(username, password):
     global session, sessionName, sessionTry
     password=encriptar(password)
-    with open("usuaris.txt") as archivo:
+    with open("usuaris.txt", "r") as archivo:
         for linea in archivo:
             username_bbdd, password_bbdd = linea.split("|")
             if username_bbdd.strip() == username and password_bbdd.strip() == password:
                 session = True
                 sessionName = username
-                print("Benvingut "+username)
+                print("\nBenvingut "+username+"\n")
                 bibliotecaMenu()
                 break
     
     if session != True and sessionTry < 2:
         sessionTry=sessionTry+1
-        print("Has fallat l'inici de sessió, torna-ho a provar.")
+        print("[!] - Has fallat l'inici de sessió, torna-ho a provar.\n")
         newusername = str(input("Nom d'usuari: "))
-        newpassword = str(input("Contrasenya: "))
+        newpassword = getpass("Contrasenya: ")
         login(newusername, newpassword)
     elif session != True and sessionTry == 2:
-        print("Has esgotat el numero d'intents disponibles, prova-ho més tard.")
+        print("\n[!] - Has esgotat el numero d'intents disponibles, prova-ho més tard.")
+        print("=====================================================================")
         
     
 def encriptar(password):
     return str(hashlib.md5(password.encode()).hexdigest())
 
 def buscarLibro(titol):
-    with open("llibres.txt") as archivo:
+    print("[...] - Buscant llibre {",titol,"} a la base de dades...")
+    with open("llibres.txt", "r") as archivo:
         encontrado=False
+        print("-------------------")
         for linea in archivo:
             titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
             if titol_bbdd.lower() == titol.lower():
@@ -41,82 +46,105 @@ def buscarLibro(titol):
                 print("Año de publicacion:", any_publicacio_bbdd)
                 print("Genero:", genere_bbdd)
                 print("ISBN:", isbn_bbdd)
+                print("-------------------")
                 encontrado = True
                 break
         if not encontrado:
-            print("Llibre no trobat")
+            print("[!] - Llibre no trobat, tornant al menu principal.")
     bibliotecaMenu()
 
-def verTodosLosLibros():
-    with open("llibres.txt") as archivo:
+def veureTotsElsLlibres():
+    with open("llibres.txt", "r") as archivo:
+        print("-------------------")
         print("Llistat de llibres:")
-        for linea in archivo:
-            titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.strip().split("|")
+        print("-------------------")
+        for linia in archivo:
+            titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linia.strip().split("|")
             print("Titol:", titol_bbdd)
             print("Autor:", autor_bbdd)
             print("Any de publicacio:", any_publicacio_bbdd)
             print("Genere:", genere_bbdd)
             print("ISBN:", isbn_bbdd)
             print("-------------------")
-            
     bibliotecaMenu()
 
-def agregarLibro(titol, autor, any_publicacio, genere, ISBN):
-    ### Comprobamos si ya existe el libro
-    with open("llibres.txt") as archivo:
+def afegirLlibre(titol, autor, any_publicacio, genere, ISBN, bypass = False):
+    liniesTotals = 0
+    with open("llibres.txt", "r") as archivo:
         for linea in archivo:
-            titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
-            if titol_bbdd.strip() == titol and autor_bbdd.strip() == autor and any_publicacio_bbdd.strip() and genere_bbdd.strip() == genere and isbn_bbdd.strip() == ISBN:
-                print("El llibre amb titol",titol,"ja existeix a la Base de Dades")
+            titol_bbdd = linea.split("|")[0]
+            if titol_bbdd == titol:
+                print("[!] - El llibre amb titol",titol,"ja existeix a la base de dades. Tornant al menu principal.")
                 bibliotecaMenu()
                 return
+            liniesTotals += 1
     
-    ### Agregamos el libro
     with open("llibres.txt", "a") as archivo:
-        archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
-        print("Has afegit el llibre ",titol,"correctament")
+        if liniesTotals > 0:
+            archivo.write(f"\n{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
+        else:
+            archivo.write(f"{titol}|{autor}|{any_publicacio}|{genere}|{ISBN}")
         
-    bibliotecaMenu()
-        
-def esborrarLlibre(titol):
-    confirmacio = str(input("Realemnt vols esborrar el llibre de la base de dades? [S/N]"))
-    if confirmacio.capitalize() == "S":
-        with open("llibres.txt") as archivo:
-            for linia in archivo:
-                titol_bbdd = linia.split("|")[0]
-                if titol == titol_bbdd:
-                    esborrarLinia("llibres.txt", linia)
-                    ###archivo.write(linia)
-                    print("Llibre esborrat :",titol)
-                    break
-    else:
-        print("Esborrament de llibre cancelat, tornant al menu principal")
-    bibliotecaMenu()
+        if not bypass:
+            print("[ok] - Has afegit el llibre",titol,"correctament")
     
-def esborrarLinia(arxiu, liniaPerEsborrar):
-    # Leer el contenido del archivo
-    with open(arxiu, 'r') as f:
-        linias = f.readlines()
-
-    # Eliminar la línea especificada
-    linias = [linia for linia in linias if linia.strip() != liniaPerEsborrar.strip()]
-
-    # Reescribir el archivo sin la línea y las líneas en blanco adicionales
-    with open(arxiu, 'w') as f:
-        f.writelines(linia for linia in linias if linia.strip())
+    if not bypass:
+        bibliotecaMenu()
         
+def esborrarLlibre(titol, confirm = True):
+    confirmacio = None
+    if confirm:
+        confirmacio = str(input("[!] - Realemnt vols esborrar el llibre de la base de dades? [S/N]: "))
+    if confirm and confirmacio.capitalize() == "S" or not confirm:
+        with open("llibres.txt", "r") as archivo:
+            encontrado=False
+            for linea in archivo:
+                titol_bbdd = linea.split("|")[0]
+                if titol_bbdd.lower() == titol.lower():
+                    encontrado = True
+            if not encontrado:
+                print("[!] - Llibre per esborrar no trobat.")
+                if confirm:
+                    print("[!] - Tornant al menu principal.")
+                    bibliotecaMenu()
+        
+        # Desem les línies del fitxer a una llista
+        linies = []
+        with open("llibres.txt", "r") as arxiu:
+            for linia in arxiu.readlines():
+                linies.append(linia)
+        
+        with open("llibres.txt", "w") as arxiu:
+            # Esborrem el contingut del fitxer
+            arxiu.write("")
+
+            # Escriurem novament el document sense el salt de linia final
+            maxLinies = len(linies) - 2
+            liniaActual = 0
+            for linia in linies:
+                if linia.split("|")[0] != titol:
+                    if liniaActual == maxLinies:
+                        arxiu.write(linia.replace('\n', ''))
+                    else:
+                        arxiu.write(linia)
+                    liniaActual += 1
+    else:
+        print("[!] - Esborrament de llibre cancelat, tornant al menu principal")
+
+    if confirm:
+        bibliotecaMenu()
+
 def editarLlibre(titol):
     llibreTrobat = False
     
     # Dades de la base de dades
-    titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd, liniaLlibre = None, None, None, None, None, None
+    titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = None, None, None, None, None
     
-    with open("llibres.txt") as archivo:
+    with open("llibres.txt", "r") as archivo:
         for linea in archivo:
                 titol_bbdd, autor_bbdd, any_publicacio_bbdd, genere_bbdd, isbn_bbdd = linea.split("|")
                 if titol_bbdd.lower() == titol.lower():
                     llibreTrobat = True
-                    liniaLlibre = linea
                     break
         
     if llibreTrobat:
@@ -134,20 +162,25 @@ def editarLlibre(titol):
         nouAny = anyPublicacio or any_publicacio_bbdd
         nouGenere = genereLlibre or genere_bbdd
         nouISBN = isbnLlibre or isbn_bbdd
-        
-        esborrarLinia("llibres.txt", liniaLlibre)
-        
-        agregarLibro(nouTitol, nouAutor, nouAny, nouGenere, nouISBN)
-        
-        print("Llibre actualitzat")
+        esborrarLlibre(titol, False)
+        afegirLlibre(nouTitol, nouAutor, nouAny, nouGenere, nouISBN, True)
+        print("-------------------")
+        print("Llibre actualitzat :",titol)
+        print("-------------------")
+        print("Titol:", nouTitol)
+        print("Autor:", nouAutor)
+        print("Any de publicacio:", nouAny)
+        print("Genere:", nouGenere)
+        print("ISBN:", nouISBN)
+        print("-------------------")
+        bibliotecaMenu()
     else:
-        print("No s'ha trobat el llibre que vols editar. Es torna al menu principal.")
+        print("[!] - No s'ha trobat el llibre que vols editar. Tornant al menu principal.")
         bibliotecaMenu()
 
 def bibliotecaMenu():
-    print("\n")
     print("=========================")
-    print("Menu d'interració de la Biblioteca")
+    print("Menu interactiu de la Biblioteca Can Casacuberta")
     print("[1] Veure un llibre")
     print("[2] Veure tots els llibres")
     print("[3] Afegir un llibre")
@@ -155,7 +188,6 @@ def bibliotecaMenu():
     print("[5] Editar un llibre")
     print("[6] Sortir")
     print("==========================")
-    
     try:
         opcio=int(input("Seleccionar opció: "))
         match opcio:
@@ -163,7 +195,7 @@ def bibliotecaMenu():
                 titol = input("Introdueix el nom del llibre que vols veure: ")
                 buscarLibro(titol)
             case 2:
-                verTodosLosLibros()
+                veureTotsElsLlibres()
             case 3:
                 llibreTitol = str(input("Insereix el titol del llibre: "))
                 autorTitol = str(input("Insereix l'autor del llibre: "))
@@ -171,7 +203,7 @@ def bibliotecaMenu():
                 genereLlibre = str(input("Insereix el genere del llibre: "))
                 isbnLlibre = str(input("Insereix el ISBN del llibre: "))
                 if llibreTitol and autorTitol and anyPublicacio and genereLlibre and isbnLlibre:
-                    agregarLibro(llibreTitol, autorTitol, anyPublicacio, genereLlibre, isbnLlibre)
+                    afegirLlibre(llibreTitol, autorTitol, anyPublicacio, genereLlibre, isbnLlibre)
                 else:
                     print("No has inserit correctament totes les dades del llibre, torna-ho a probar")
                     bibliotecaMenu()
@@ -190,11 +222,11 @@ def bibliotecaMenu():
                     print("No has inserit el nom del llibre a editar")
                     bibliotecaMenu()
             case 6:
-                print("Aplicació tancada")
+                print("Sistema de biblioteca tancat. Fins la propera!")
                 exit()
             case _:
-                print("\nError : Opcio no válida : "+str(opcio))
+                print("\n[!] - Opcio no válida : "+str(opcio))
                 bibliotecaMenu()
     except ValueError:
-        print("Error : Només es permés fer ús de numeros per seleccionar una opció")
+        print("[!] - Només es permés fer ús de numeros per seleccionar una opció")
         bibliotecaMenu()
